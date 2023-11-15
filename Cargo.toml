@@ -1,10 +1,5 @@
 [workspace]
-members = [
-  ".",
-  "sqlx-crud-macros",
-  "examples/axum",
-  "examples/serenity",
-]
+members = [".", "sqlx-crud-macros", "examples/axum", "examples/serenity"]
 
 [package]
 name = "sqlx-crud"
@@ -20,20 +15,18 @@ categories = ["database", "asynchronous", "web-programming"]
 authors = ["Trey Dempsey <trey.dempsey@gmail.com>"]
 
 [features]
-default = ["runtime-tokio-rustls"]
-runtime-actix-native-tls = ["sqlx/runtime-actix-native-tls"]
-runtime-async-std-native-tls = ["sqlx/runtime-async-std-native-tls"]
-runtime-tokio-native-tls = ["sqlx/runtime-tokio-native-tls"]
-runtime-actix-rustls = ["sqlx/runtime-actix-rustls"]
-runtime-async-std-rustls = ["sqlx/runtime-async-std-rustls"]
-runtime-tokio-rustls = ["sqlx/runtime-tokio-rustls"]
+default = ["runtime-tokio", "tls-rustls"]
+runtime-async-std = ["sqlx/runtime-async-std"]
+runtime-tokio = ["sqlx/runtime-tokio"]
+tls-rustls = ["sqlx/tls-rustls"]
+tls-native-tls = ["sqlx/tls-native-tls"]
 
 [dependencies]
 futures = "0.3"
-sqlx = { version = "0.6" }
+sqlx = { version = "0.7" }
 sqlx-crud-macros = { version = "0.4", path = "sqlx-crud-macros" }
 thiserror = "1"
 
 [dev-dependencies]
-sqlx = { version = "0.6", features = ["runtime-tokio-rustls", "sqlite"] }
+sqlx = { version = "0.7", features = ["runtime-tokio", "tls-rustls", "sqlite"] }
 tokio-test = "0"

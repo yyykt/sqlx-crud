@@ -5,8 +5,8 @@ use quote::{format_ident, quote};
 use syn::punctuated::Punctuated;
 use syn::token::Comma;
 use syn::{
-    parse_macro_input, Attribute, Data, DataStruct, DeriveInput, Expr, Field, Fields, FieldsNamed, Ident,
-    LitStr, Meta, MetaNameValue, Lit, ExprLit,
+    parse_macro_input, Attribute, Data, DataStruct, DeriveInput, Expr, ExprLit, Field, Fields,
+    FieldsNamed, Ident, Lit, LitStr, Meta, MetaNameValue,
 };
 
 #[proc_macro_derive(SqlxCrud, attributes(database, external_id, id))]
@@ -212,7 +212,10 @@ fn build_sqlx_crud_impl(config: &Config) -> TokenStream2 {
         }
 
         #[automatically_derived]
-        impl<'e> #crate_name::traits::Crud<'e, &'e ::sqlx::pool::Pool<#db_ty>> for #ident {
+        impl<'e, E> #crate_name::traits::Crud<'e, E> for #ident
+        where
+            E: 'e + ::sqlx::Executor<'e, Database = #db_ty>,
+        {
             fn insert_args(self) -> <#db_ty as ::sqlx::database::HasArguments<'e>>::Arguments {
                 use ::sqlx::Arguments as _;
                 let mut args = <#db_ty as ::sqlx::database::HasArguments<'e>>::Arguments::default();
@@ -322,14 +325,17 @@ impl From<&str> for DbType {
 impl DbType {
     fn new(attrs: &[Attribute]) -> Self {
         let mut db_type = DbType::Sqlite;
-        attrs.iter()
+        attrs
+            .iter()
             .find(|a| a.path().is_ident("database"))
-            .map(|a| a.parse_nested_meta(|m| {
-                if let Some(path) = m.path.get_ident() {
-                    db_type = DbType::from(path.to_string().as_str());
-                }
-                Ok(())
-            }));
+            .map(|a| {
+                a.parse_nested_meta(|m| {
+                    if let Some(path) = m.path.get_ident() {
+                        db_type = DbType::from(path.to_string().as_str());
+                    }
+                    Ok(())
+                })
+            });
 
         db_type
     }

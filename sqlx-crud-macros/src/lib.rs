@@ -5,8 +5,8 @@ use quote::{format_ident, quote};
 use syn::punctuated::Punctuated;
 use syn::token::Comma;
 use syn::{
-    parse_macro_input, Attribute, Data, DataStruct, DeriveInput, Expr, ExprLit, Field, Fields,
-    FieldsNamed, Ident, Lit, LitStr, Meta, MetaNameValue,
+    parse_macro_input, Attribute, Data, DataStruct, DeriveInput, Field, Fields, FieldsNamed, Ident,
+    LitStr,
 };
 
 #[proc_macro_derive(SqlxCrud, attributes(database, external_id, id))]

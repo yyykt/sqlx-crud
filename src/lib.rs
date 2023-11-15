@@ -54,6 +54,7 @@
 //! use sqlx_crud::SqlxCrud;
 //!
 //! #[derive(Debug, FromRow, SqlxCrud)]
+//! #[database(Sqlite)]
 //! pub struct User {
 //!    pub user_id: i32,
 //!    pub name: String,
@@ -118,6 +119,7 @@
 //! use sqlx_crud::{Schema, SqlxCrud};
 //!
 //! #[derive(Debug, FromRow, SqlxCrud)]
+//! #[database(Sqlite)]
 //! pub struct User {
 //!    pub user_id: i32,
 //!    pub name: String,
@@ -169,6 +171,7 @@ macro_rules! doctest_setup {
         use sqlx_crud::SqlxCrud;
 
         #[derive(Debug, FromRow, SqlxCrud)]
+        #[database(Sqlite)]
         pub struct User {
             pub user_id: i32,
             pub name: String,

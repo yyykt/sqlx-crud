@@ -31,6 +31,7 @@ pub type TryCollectFut<'e, T> = TryCollect<CrudStream<'e, T>, Vec<T>>;
 /// use sqlx_crud::SqlxCrud;
 ///
 /// #[derive(FromRow, SqlxCrud)]
+/// #[database(Sqlite)]
 /// pub struct User {
 ///     user_id: i32,
 ///     name: String,
@@ -51,6 +52,7 @@ pub trait Schema {
     /// use sqlx_crud::{Schema, SqlxCrud};
     ///
     /// #[derive(FromRow, SqlxCrud)]
+    /// #[database(Sqlite)]
     /// struct GoogleIdToken {
     ///     id: i32,
     ///     audience: String,
@@ -114,6 +116,7 @@ pub trait Schema {
     /// use sqlx_crud::{Schema, SqlxCrud};
     ///
     /// #[derive(Debug, FromRow, SqlxCrud)]
+    /// #[database(Sqlite)]
     /// #[external_id]
     /// pub struct UserExternalId {
     ///     pub user_id: i32,

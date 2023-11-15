@@ -8,6 +8,7 @@ struct Handler {
 }
 
 #[derive(FromRow, SqlxCrud)]
+#[database(Sqlite)]
 struct User {
     id: i64,
     name: String,

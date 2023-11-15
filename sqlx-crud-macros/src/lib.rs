@@ -1,7 +1,7 @@
 use inflector::Inflector;
 use proc_macro::{self, TokenStream};
 use proc_macro2::TokenStream as TokenStream2;
-use quote::{format_ident, quote};
+use quote::{format_ident, quote, ToTokens};
 use syn::punctuated::Punctuated;
 use syn::token::Comma;
 use syn::{
@@ -324,20 +324,20 @@ impl From<&str> for DbType {
 
 impl DbType {
     fn new(attrs: &[Attribute]) -> Self {
-        let mut db_type = DbType::Sqlite;
+        let mut db_type = None;
         attrs
             .iter()
             .find(|a| a.path().is_ident("database"))
             .map(|a| {
                 a.parse_nested_meta(|m| {
                     if let Some(path) = m.path.get_ident() {
-                        db_type = DbType::from(path.to_string().as_str());
+                        db_type = Some(DbType::from(path.to_string().as_str()));
                     }
                     Ok(())
                 })
             });
 
-        db_type
+        db_type.expect("The `database` attribute is required. Available database types are `Any`, `Mssql`, `MySql`, `Postgres`, `Sqlite`.")
     }
 
     fn sqlx_db(&self) -> TokenStream2 {
